@@ -6,7 +6,7 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "zendesk_remote_auth"
     gem.summary = %Q{Helper for ZenDesk remote authentication}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.description = %Q{description goes here}
     gem.email = "tcrawley@gmail.com"
     gem.homepage = "http://github.com/tobias/zendesk_remote_auth"
     gem.authors = ["Tobias Crawley"]
