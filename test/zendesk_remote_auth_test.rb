@@ -4,32 +4,100 @@ class ZendeskRemoteAuthTest < Test::Unit::TestCase
   
   def setup
     @auth = Object.new
-    @auth.extend(ZenDesk::RemoteAuth)
+    @auth.extend(Zendesk::RemoteAuthHelper)
   end
-
-  context 'url generation' do 
-    should 'check parameters' do
-      params = { }
-      @auth.expects(:check_parameters).with(params)
-      @auth.generate_zendesk_remote_auth_url(params)
+  
+  context 'RemoteAuth' do
+    setup do
+      Zendesk::RemoteAuth.token = Zendesk::RemoteAuth.auth_url = nil
     end
-  end
-
-  context 'required parameters' do
-    should 'require name' do
-      ZenDesk::RemoteAuth::PARAMETERS[:name].should == :required
-    end
-
-    should 'require email' do
-      ZenDesk::RemoteAuth::PARAMETERS[:email].should == :required
-    end
-  end
-
-  context 'check parameters' do
-    should 'raise error when required fields are not present' do
+    
+    should 'raise exception if token is not set' do
       assert_raise ArgumentError do
-        @auth.send(:check_parameters, { })
+        Zendesk::RemoteAuth.token
       end
+    end
+
+    should 'return the token without exception if it is set' do
+      Zendesk::RemoteAuth.token = 'blah'
+      Zendesk::RemoteAuth.token.should == 'blah'
+    end
+
+
+    should 'raise exception if auth_url is not set' do
+      assert_raise ArgumentError do
+        Zendesk::RemoteAuth.auth_url
+      end
+    end
+
+    should 'return the auth_url without exception if it is set' do
+      Zendesk::RemoteAuth.auth_url = 'blah'
+      Zendesk::RemoteAuth.auth_url.should == 'blah'
+    end
+  end
+  
+
+  context 'url generation' do
+    setup do
+      Zendesk::RemoteAuth.token = 'the_token'
+      Zendesk::RemoteAuth.auth_url = 'the_url'
+      @valid_params = { :email => 'test@example.com', :name => 'blah'}
+    end
+    
+    context 'required fields' do
+      should 'raise an argument error the name is not provided' do
+        assert_raise ArgumentError do
+          @valid_params.delete(:name)
+          @auth.zendesk_remote_auth_url(@valid_params)
+        end
+      end
+
+      should 'raise an argument error the email is not provided' do
+        assert_raise ArgumentError do
+          @valid_params.delete(:email)
+          @auth.zendesk_remote_auth_url(@valid_params)
+        end
+      end
+
+    end
+    
+    should 'return a url that starts with the auth_url' do
+      @auth.zendesk_remote_auth_url(@valid_params)
+    end
+
+    should 'have an empty hash param if external_id not provided' do
+      @auth.zendesk_remote_auth_url(@valid_params).should =~ /hash=(&|$)/
+    end
+
+    should 'have a hash param if external_id provided' do
+      @auth.zendesk_remote_auth_url(@valid_params.merge(:external_id => 'id')).should_not =~ /hash=(&|$)/
+    end
+
+    context 'given a user object' do
+      setup do
+        @user = mock
+        @user.expects(:name).returns('a_name')
+        @user.expects(:email).returns('an_email')
+      end
+      
+      should 'pull the name from the user' do
+        @auth.zendesk_remote_auth_url(@user).should =~ /name=a_name/
+      end
+      
+      should 'pull the email from the user' do
+        @auth.zendesk_remote_auth_url(@user).should =~ /email=an_email/
+      end
+      
+      should 'pull the id from the user' do
+        @user.expects(:id).returns('an_id')
+        @auth.zendesk_remote_auth_url(@user).should =~ /external_id=an_id/
+      end
+
+      should 'pull the organization from the user if available' do
+        @user.expects(:zendesk_organization).returns('org')
+        @auth.zendesk_remote_auth_url(@user).should =~ /organization=org/
+      end
+      
     end
   end
 end
