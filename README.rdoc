@@ -1,16 +1,89 @@
 = zendesk_remote_auth
 
-Description goes here.
+zendesk_remote_auth is a simple gem providing help with Zendesk's SSO
+functionality (see http://www.zendesk.com/api/remote_authentication).
+
+== Installation and Setup
+
+* Install:
+  gem install tobias-zendesk_remote_auth
+
+* Setup:
+You will need to give the gem your token and authentication url,
+perhaps in an initializer:
+  Zendesk::RemoteAuth.token = 'YOUR-TOKEN'
+  Zendesk::RemoteAuth.auth_url = 'https://yourcompany.zendesk.com/access/remote/'
+
+and config the gem in environment.rb (if using rails):
+  config.gem 'tobias-zendesk_remote_auth', :lib => 'zendesk_remote_auth', :source => http://gems.github.com'
+
+== Usage
+
+Mixin the Zendesk::RemoteAuthHelper module wherever needed, then call:
+  zendesk_remote_auth_url(:name => 'user name',
+                          :email => 'user email',
+                          <optional params>)
+
+This will return a url you can redirect the user to to log them in to
+your zendesk account. 
+
+As a convenience, you can pass a user object to zendesk_remote_auth_url:
+  zendesk_remote_auth_url(user)
+
+This user must respond_to? :name and :email, and its :id will be used
+as the :external_id (making it useless with user objects that return
+an ephemeral object_id, but works well with ActiveRecord and the
+like). If the user object responds to :zendesk_organization, that will
+be used as the :organization for the call.
+
+This method will generate and include the hash of the parameters for
+you if necessary. 
+
+== Example Auth Controller
+
+Here is an example controller that handles login and logout for
+zendesk:
+
+  # Uses restful-authentication style auth. 
+  # 
+  # Define the following in routes.rb:
+  # map.with_options :controller => 'zendesk_auth' do |zd|
+  #   zd.connect '/zendesk/authorize', :action => 'authorize'
+  #   zd.connect '/zendesk/logout', :action => 'logout'
+  # end
+  class ZendeskAuthController < ApplicationController
+    include Zendesk::RemoteAuthHelper
+  
+    skip_before_filter :login_required, :only => :logout
+  
+    def authorize
+      redirect_to zendesk_remote_auth_url(current_user)
+    end
+
+    def logout
+      redirect_to logout_url
+    end
+
+    protected
+    def login_required
+      if !logged_in?
+        flash[:notice] = 'You must log in to access the support site.'
+        store_location
+        redirect_to login_path
+      end
+    end
+  end
+
 
 == Note on Patches/Pull Requests
  
 * Fork the project.
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
+future version unintentionally.
 * Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but
-   bump version in a commit by itself I can ignore when I pull)
+(if you want to have your own version, that is fine but
+bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
 == Copyright

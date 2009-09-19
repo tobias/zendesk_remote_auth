@@ -1,8 +1,13 @@
 require 'digest/md5'
 require 'active_support' #gives us Hash.to_query
 
-#http://www.zendesk.com/api/remote_authentication
+##
+# Provides a helper to use Zendesk's SSO/remote auth service.
+# see: http://www.zendesk.com/api/remote_authentication
 module Zendesk
+
+  ##
+  # Handles storing the token and auth_url (endpoint) for the Zendesk side.
   class RemoteAuth
     class << self
       attr_writer :auth_url, :token
@@ -18,8 +23,24 @@ module Zendesk
       end
     end
   end
-  
+
+  ##
+  # Provides the method that generates the auth url. Mixin where required.
   module RemoteAuthHelper
+    ##
+    # Takes a hash of parameters and generates the hashed auth
+    # url. The hash must include the :name and :email for the user.
+    # See: http://www.zendesk.com/api/remote_authentication for a list
+    # of all of the parameters.
+    #
+    # If the :timestamp is not provided, Time.now will be used. If an
+    # :external_id is provided, then the :hash will be generated.
+    #
+    # As a convenience, a user object can be passed instead, but must
+    # respond_to? at least :email and :name. The :id of the user
+    # object will be used as the :external_id, and if the user
+    # responds to :zendesk_organization, that will be used as the
+    # :organization. 
     def zendesk_remote_auth_url(user_or_params)
       params = user_or_params.is_a?(Hash) ? user_or_params : user_to_params(user_or_params)
       validate_params(params)
