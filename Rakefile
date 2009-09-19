@@ -5,13 +5,14 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "zendesk_remote_auth"
-    gem.summary = %Q{Helper for ZenDesk remote authentication}
-    gem.description = %Q{description goes here}
+    gem.summary = %Q{Helper for Zendesk SSO/remote authentication}
+    gem.description = %Q{See the README.}
     gem.email = "tcrawley@gmail.com"
     gem.homepage = "http://github.com/tobias/zendesk_remote_auth"
     gem.authors = ["Tobias Crawley"]
     gem.add_development_dependency "thoughtbot-shoulda"
-    gem.add_development_dependency "yard"
+    gem.add_development_dependency "mocha"
+    gem.add_development_dependency "matchy"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
