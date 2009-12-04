@@ -7,7 +7,9 @@ functionality (see http://www.zendesk.com/api/remote_authentication).
 
 * Install:
 
-  gem install tobias-zendesk_remote_auth
+The gem is hosted on Gemcutter (http://gemcutter.org/).
+
+  gem install zendesk_remote_auth
 
 * Setup:
 You will need to give the gem your token and authentication url,
@@ -16,7 +18,7 @@ perhaps in an initializer:
   Zendesk::RemoteAuth.auth_url = 'https://yourcompany.zendesk.com/access/remote/'
 
 and config the gem in environment.rb (if using rails):
-  config.gem 'tobias-zendesk_remote_auth', :lib => 'zendesk_remote_auth', :source => http://gems.github.com'
+  config.gem 'zendesk_remote_auth'
 
 == Usage
 
