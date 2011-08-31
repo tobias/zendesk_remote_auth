@@ -73,6 +73,7 @@ module Zendesk
       str_to_hash << params[:email]
       str_to_hash << params[:external_id].to_s if params[:external_id]
       str_to_hash << params[:organization].to_s if params[:organization]
+      str_to_hash << params[:remote_photo_url].to_s if params[:remote_photo_url]
       str_to_hash << token
       str_to_hash << params[:timestamp].to_s
       Digest::MD5.hexdigest(str_to_hash)
