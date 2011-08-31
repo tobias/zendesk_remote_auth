@@ -73,6 +73,12 @@ class ZendeskRemoteAuthTest < Test::Unit::TestCase
       @auth.zendesk_remote_auth_url(@valid_params.merge(:external_id => 'id')).should_not =~ /hash=(&|$)/
     end
 
+    should 'have a different hash param if external_id and remote_photo_url provided ' do
+      a=@auth.zendesk_remote_auth_url(@valid_params.merge(:external_id => 'id')).match(/(hash=[^&]*)/)[1]
+      b=@auth.zendesk_remote_auth_url(@valid_params.merge(:external_id => 'id', :remote_photo_url => 'photo_url')).match(/(hash=[^&]*)/)[1]
+      a.should_not == b
+    end
+
     context 'given a user object' do
       setup do
         @user = mock
