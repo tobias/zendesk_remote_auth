@@ -3,12 +3,15 @@
 zendesk_remote_auth is a simple gem providing help with Zendesk's SSO
 functionality (see http://www.zendesk.com/api/remote_authentication).
 
+== HEY YOU!
+
+Do you actually use this gem? Are you interested in taking it over?
+I no longer use this, so don't have a lot of interest in maintaining it. 
+If you do, get in touch.
+
 == Installation and Setup
 
 * Install:
-
-The gem is hosted on Gemcutter (http://gemcutter.org/).
-
   gem install zendesk_remote_auth
 
 * Setup:
@@ -21,6 +24,8 @@ and config the gem in environment.rb (if using rails):
   config.gem 'zendesk_remote_auth'
 
 == Usage
+
+Note: The latest release requires ActiveSupport 3.0 or greater. 
 
 Mixin the Zendesk::RemoteAuthHelper module wherever needed, then call:
   zendesk_remote_auth_url(:name => 'user name',
@@ -88,4 +93,4 @@ zendesk:
 
 == Copyright
 
-Copyright (c) 2009 Tobias Crawley. See LICENSE for details.
+Copyright (c) 2011 Tobias Crawley. See LICENSE for details.
