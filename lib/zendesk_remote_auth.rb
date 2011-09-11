@@ -1,5 +1,5 @@
 require 'digest/md5'
-require 'active_support' #gives us Hash.to_query
+require 'active_support/core_ext/object' #gives us Hash.to_query
 
 ##
 # Provides a helper to use Zendesk's SSO/remote auth service.
