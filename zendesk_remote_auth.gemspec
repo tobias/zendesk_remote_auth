@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{zendesk_remote_auth}
-  s.version = "1.0.0"
+  s.version = "1.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Tobias Crawley}]
-  s.date = %q{2011-09-11}
+  s.date = %q{2011-12-14}
   s.description = %q{See the README.}
   s.email = %q{tcrawley@gmail.com}
   s.extra_rdoc_files = [
