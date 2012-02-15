@@ -1,13 +1,11 @@
+== zendesk_remote_auth HAS MOVED
+
+THIS IS NO LONGER THE CANONICAL REPO. Head on over to: https://github.com/viewbook/zendesk_remote_auth
+
 = zendesk_remote_auth
 
 zendesk_remote_auth is a simple gem providing help with Zendesk's SSO
 functionality (see http://www.zendesk.com/api/remote_authentication).
-
-== HEY YOU!
-
-Do you actually use this gem? Are you interested in taking it over?
-I no longer use this, so don't have a lot of interest in maintaining it. 
-If you do, get in touch.
 
 == Installation and Setup
 
